@@ -54,7 +54,11 @@ if selected_video in range(1, len(results)+1):
     save_path = askForPath()
     print('Downloading...')
     if ch == '1':
-        selected_video.streams.filter(subtype='mp4').filter(progressive=True).all()[1].download(save_path)
+        streams = selected_video.streams.filter(subtype='mp4').filter(progressive=True).all()
+        for i, stream in enumerate(streams):
+            print('[{}] {} - {} fps'.format(i+1, stream.fmt_profile['resolution'], stream.fps))
+        ch = int(input('Option: '))
+        streams[ch].download(save_path)
         print('\nDownload complete')
     elif ch == '2':
         selected_video.streams.filter(only_audio=True).filter(subtype='mp4').all()[0].download(save_path)
